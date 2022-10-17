@@ -20,7 +20,7 @@ import (
 // version indicates the version of gpg-agent to emulate.
 // The gpg CLI client will emit a warning if this is lower than the version of
 // the gpg client itself.
-const version = "2.3.4"
+var Version = "2.3.4"
 
 // The KeyService interface provides functions used by the Assuan FSM.
 type KeyService interface {
@@ -61,7 +61,7 @@ func New(rw io.ReadWriter, log *zap.Logger, ks ...KeyService) *Assuan {
 				case getinfo:
 					if bytes.Equal(assuan.data[0], []byte("version")) {
 						// masquerade as a compatible gpg-agent
-						_, err = fmt.Fprintf(rw, "D %s\nOK\n", version)
+						_, err = fmt.Fprintf(rw, "D %s\nOK\n", Version)
 					} else {
 						err = fmt.Errorf("unknown getinfo command: %q", assuan.data[0])
 					}
